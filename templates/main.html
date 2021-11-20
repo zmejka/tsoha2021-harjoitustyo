@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+  </head>
+
+  <title>Etusivu</title>
+  <h1> Tervetuloa! </h1>
+  <hr>
+
+  <p>Olet kirjautunut nimellä {{ session.username }}</p>
+  <a href="/logout">Kirjaudu ulos</a>
+
+  <hr>
+  <h3> Aiheet: </h3>
+  <form action="/quiz" method="POST">
+    <label for="title">Valitse aihe:</label>
+        <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
+      <br>
+    <p><input type="submit" value="Valitse"></p>
+  </form>
+
+  <hr>
+  <h3> Aiheen luominen </h3>
+  <form action="/subject" method="POST">
+    <p>
+    <h4> Luo uusi aihe: </h4>
+      <label> Anna aiheen nimi </label>
+      <input type="text" name="title" value="" size="20" maxlength="64" label ></p>
+      <label> Anna aiheen lyhyt kuvaus </label>
+      <textarea name="description" rows="3" cols="50"></textarea>
+    <p><input type="submit" value="Luo aihe"></p>
+    </form>
+  <hr>
+
+  <h3> Kysymyksen luominen </h3>
+  <form action="/question" method="POST">
+    <p>
+    <h4> Luo uusi kysymys: </h4>
+    <label for="title">Valitse aihe:</label>
+      <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
+      <br>
+      <label for="question_type">Valitse kysymystyyppi:</label>
+      <select name="question_type" id="question_type">
+        <option value="boolean"> Tosi/Epätosi </option>
+        <option value="integer"> Lukuvastaus </option>
+        <option value="multiple_choice"> Monivalinta </option>
+      </select>
+      <br>
+      <label> Syötä kysymys </label>
+      <textarea name="question" rows="2" cols="50"></textarea>
+      <br>
+      <label> Syötä vastaus </label>
+        {% if question_type == boolean %}
+          <input type="radio" name="answer" value="1">Tosi
+          <input type="radio" name="answer" value="0">Epätosi <br>
+        {% endif %}
+    <p><input type="submit" value="Luo kysymys"></p>
+    </form>
+  <hr>
+
+</html>

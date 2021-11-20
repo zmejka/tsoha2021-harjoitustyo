@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+  </head>
+
+  <h1> Rekisteröinti </h1>
+  <hr>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <div style="color:red;text-align:center;">{{ message }}</div>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+    <base>
+    <form action="/new_user" method="POST">
+      <p>Anna tunnus:<br>
+      <input type="text" name="username"></p>
+      <p>Anna salasana:<br>
+      <input type="password" name="password"></p>
+      <p>Syötä nimi:<br>
+      <input type="text" name="name"></p>
+      <p>Valitse rooli</p>
+      <input type="radio" name="role" value="Harjoittelija">Harjoittelija <br>
+      <input type="radio" name="role" value="Ohjaaja">Ohjaaja <br>
+      <input type="submit" value="Rekisteröty">
+    </form>
+    </base>
+
+</html>
