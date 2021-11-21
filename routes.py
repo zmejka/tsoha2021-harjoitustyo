@@ -14,13 +14,13 @@ def index():
 
 @app.route("/login", methods=["POST"])
 def login():
-        username = request.form["username"]
-        password = request.form["password"]
-        if users.login(username, password):
-            session["username"] = username
-            return redirect("/main")
-        else:
-            return redirect("/error")
+    username = request.form["username"]
+    password = request.form["password"]
+    if users.login(username, password):
+        session["username"] = username
+        return redirect("/main")
+    else:
+        return redirect("/error")
 
 @app.route("/logout")
 def logout():
@@ -49,7 +49,7 @@ def new_user():
     if not register:
         flash("Käyttöjätunnus tai salasana ei kelpaa!")
         return redirect("/register")
-    return redirect("/main")
+    return redirect("/")
 
 @app.route("/main")
 def main():

@@ -16,4 +16,21 @@ Sovelluksen ominaisuuksia ovat:
 - Harjoittelija voi valita kuinka monen kysymykseen hän halua vastata (esim. 10 tai 20 kpl). Harjoittelija vastaa kysymyksiin ja saa heti palautteen, menikö vastaus oikein. Lopuksi Harjoittelija näkee tilaston omista vastaauksista.
 - Harjoittelija voi lähettää Ohjaajalle viestin, jos havaitsee virheen kysymyksessä tai haluaa antaa palautetta sisällöstä. Ohjaaja voi vastata saamaansa palautteeseen.
 
-Sovellus ei ole vielä testattavissa.
+Sovellus on testattavissa. Sovellus löytyy osoitteesta: https://tsoha2021-quizapp.herokuapp.com/
+
+Sovellukset testaaminen:
+
+- Sovellukseen voi kirjautua, joko luomalla oman tunnuksen tai käyttämällä käyttäjätunnuksia Käyttäjä (salasana: testaus) tai Admin (salasana: admin). Tässä vaiheessa käyttäjäroolien toiminnassa ei ole vielä eroja.
+- Käyttäjä voi luoda aiheita ja lisätä aiheisiin kysymyksiä.
+- Tässä vaiheessa voi luoda ainoastaan Tosi/Epätosi tyyppisiä kysymyksiä.
+- Käyttäjä voi valita aiheen ja aloittaa kysymyksiin vastamista, mutta tämä toiminto on toteutettu vain osittain. Tällä hetkellä kysymys ei vaihdu.
+
+Puutteet:
+
+- Sovelluksen ulkoasua ei vielä toteutettu
+- Sovelluksen toiminnot on hyvin keskeneräisiä
+- Käyttäjätunnuksen ja salasanan merkkimäärät ei ole rajoitettu
+- Rekisteröitymisestä, aiheiden ja kysymysten luomisen onnistumisestä/epäonnistumisestä ei tule mitään ilmoitusta.
+- Käyttäjätasojen toimintaerot puuttuvat
+- Tietoturva vaatimuksia ei vielä otettu kunnolla huomioon
+- Ohjelman rakennetta ei vielä jäsennetty kunnolla

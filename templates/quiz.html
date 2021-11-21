@@ -10,17 +10,17 @@
     <hr>
 
     <p>Olet kirjautunut nimellä {{ session.username }}</p>
-    <a href="/main">Palaa aihevalintaan</a>
+      <a href="/main">Palaa aihevalintaan</a>
     <br>
-    <a href="/logout">Kirjaudu ulos</a>
+      <a href="/logout">Kirjaudu ulos</a>
 
   <hr>
   <div style="margin: 20px">
-  <h2 >Vastaa kysymyksiin </h2>
-  <table border="0" cellspacing="5">
-    <tr>
-      <th>Kysymys</th><th>Tosi </th><th>Epätosi </th><th>Tarkista </th>
-      </tr>
+    <h2 >Vastaa kysymyksiin </h2>
+      <table border="0" cellspacing="5">
+        <tr>
+          <th>Kysymys</th><th>Tosi </th><th>Epätosi </th><th>Tarkista </th>
+        </tr>
         <form action="/check" method="POST">
             <tr>
               <input type="hidden" name="question_id" value="{{questions[0][0]}}">
@@ -31,8 +31,8 @@
               <td><input type="radio" name="value" value="0"></td>
               <td><input type="submit" value="Tarkista"></td>
         </form>
-    </tr>
-  </table>
+        </tr>
+      </table>
   </div>
 
 <!-- {% for row in questions %}
