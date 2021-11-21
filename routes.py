@@ -16,8 +16,8 @@ def index():
 def login():
         username = request.form["username"]
         password = request.form["password"]
-        session["username"] = username
         if users.login(username, password):
+            session["username"] = username
             return redirect("/main")
         else:
             return redirect("/error")
