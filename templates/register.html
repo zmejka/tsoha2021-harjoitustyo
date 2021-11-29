@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
-  </head>
+{% extends "layout.html" %}
+{% block title %}Etusivu{% endblock %}
+{% block content %}
 
   <h1> Rekisteröinti </h1>
   <hr>
@@ -21,7 +18,9 @@
       <p>Anna tunnus:<br>
         <input type="text" name="username"></p>
       <p>Anna salasana:<br>
-        <input type="password" name="password"></p>
+        <input type="password" name="password1"></p>
+      <p>Toista salasana:<br>
+        <input type="password" name="password2"></p>
       <p>Syötä nimi:<br>
         <input type="text" name="name"></p>
       <p>Valitse rooli</p>
@@ -31,4 +30,4 @@
     </form>
   </base>
 
-</html>
+{% endblock %}

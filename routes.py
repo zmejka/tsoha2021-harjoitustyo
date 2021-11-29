@@ -1,5 +1,6 @@
 from app import app
 from flask import render_template, request, redirect, session, flash
+import random
 from os import getenv
 from db import db
 import users
@@ -26,6 +27,7 @@ def login():
 def logout():
     try:
         del session["username"]
+        del session["csfr_token"]
     except:
         return redirect("/")
     return redirect("/")
@@ -38,18 +40,31 @@ def error():
 def register():
     return render_template("register.html")
 
-@app.route("/new_user", methods=["POST"])
+@app.route("/new_user", methods=["GET","POST"])
 def new_user():
     ''' Creating new user '''
-    username = request.form["username"]
-    password = request.form["password"]
-    name = request.form["name"]
-    role = request.form["role"]
-    register = users.new_user(username, password, name, role)
-    if not register:
-        flash("Käyttöjätunnus tai salasana ei kelpaa!")
-        return redirect("/register")
-    return redirect("/")
+    if request.method == "GET":
+        return render_template("regiter.html")
+    if request.method == "POST":
+        username = request.form["username"]
+        if len(username) < 2:
+            flash("Käyttäjätunnus on liian lyhyt.")
+            return redirect("/register")
+        password1 = request.form["password1"]
+        password2 = request.form["password2"]
+        name = request.form["name"]
+        role = request.form["role"]
+        if len(password1) < 6:
+            flash("Salasana on liian lyhyt.")
+            return redirect("/register")
+        if password1 != password2:
+            flash("Salasanat eivät täsmä.")
+            return redirect("/register")
+        if users.new_user(username, password1, name, role):
+            return redirect("/")
+        else:
+            flash("Jokin meni vikaan! Kokeile uudelleen.")
+            return redirect("/register")
 
 @app.route("/main")
 def main():
@@ -72,6 +87,22 @@ def create_subject():
         return redirect("/main")
     return redirect("/main")
 
+@app.route("/comment", methods=["POST"])
+def add_comment():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+    title = request.form["title"]
+    username_id = users.get_user_id()
+    comment = request.form["comment"]
+    title_id = subject.find_subject(title)
+    try:
+        sql = "INSERT INTO comments (title_id, comment, username_id) VALUES (:title_id, :comment, :username_id)"
+        db.session.execute(sql, {"title_id":title_id, "comment":comment, "username_id":username_id})
+        db.session.commit()
+    except:
+        return redirect("/main")
+    return redirect("/main")
+
 # ---------------------------------- Questions -------------------------------------------------
 
 @app.route("/question", methods=["POST"])
@@ -88,17 +119,14 @@ def create_queston():
         return redirect("/main")
     return redirect("/main")
 
-@app.route("/quiz", methods=["POST"])
+@app.route("/quiz", methods=["POST","GET"])
 def quiz():
     title = request.form["title"]
-    sql = "SELECT id FROM subject WHERE title = :title"
-    result = db.session.execute(sql, {"title":title})
-    titles = result.fetchall()
-    title_id = titles[0][0]
-    sql = "SELECT id, question, title_id, answer FROM question WHERE title_id = :title_id"
-    result = db.session.execute(sql, {"title_id":title_id})
-    questions = result.fetchall()
-    return render_template("quiz.html", questions = questions)
+    amount = int(request.form["amount"])
+    title_id = subject.find_subject(title)
+    questions = subject.question_list(title_id, amount)
+    for i in questions:
+        return render_template("quiz.html", questions=i)
 
 @app.route("/check", methods=["POST"])
 def getAnswer():

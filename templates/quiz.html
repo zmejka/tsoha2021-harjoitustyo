@@ -21,30 +21,20 @@
         <tr>
           <th>Kysymys</th><th>Tosi </th><th>Epätosi </th><th>Tarkista </th>
         </tr>
+
         <form action="/check" method="POST">
-            <tr>
-              <input type="hidden" name="question_id" value="{{questions[0][0]}}">
-              <input type="hidden" name="answer" value="{{questions[0][3]}}">
-              <input type="hidden" name="title_id" value="{{questions[0][2]}}">
-              <td>{{ questions[0][1] }}</td>
-              <td><input type="radio" name="value" value="1"> </td>
-              <td><input type="radio" name="value" value="0"></td>
-              <td><input type="submit" value="Tarkista"></td>
+          <tr>
+            <input type="hidden" name="question_id" value="{{questions[0]}}">
+            <input type="hidden" name="answer" value="{{questions[3]}}">
+            <input type="hidden" name="title_id" value="{{questions[2]}}">
+            <td>{{ questions[1] }}</td>
+            <td><input type="radio" name="value" value="1"> </td>
+            <td><input type="radio" name="value" value="0"></td>
+            <td><input type="submit" value="Lukitse"></td>
+          </tr>
         </form>
-        </tr>
+
       </table>
   </div>
-
-<!-- {% for row in questions %}
-          <form action="/check" method="POST">
-            <tr>
-              <input type="hidden" name="question_id" value="{{row[0]}}">
-              <input type="hidden" name="answer" value="{{row[2]}}">
-              <td>{{ row[1] }}</td>
-              <td><input type="radio" name="{{row[1]}}" value="1"> </td>
-              <td><input type="radio" name="{{row[1]}}" value="0"></td>
-              <td><input type="submit" value="Vastaa"></td>
-          </form>
-        {% endfor %} -->
 
 </html>
