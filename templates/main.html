@@ -8,6 +8,15 @@
   <title>Etusivu</title>
   <h1> Tervetuloa! </h1>
   <hr>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <div style="color:red;text-align:center;">{{ message }}</div>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
 
   <p>Olet kirjautunut nimellä {{ session.username }}</p>
     <a href="/logout">Kirjaudu ulos</a>
@@ -42,43 +51,48 @@
     </div>
   </div>
 
-  <hr>
-  <h3> Aiheen luominen </h3>
-    <form action="/subject" method="POST">
-      <p>
-      <h4> Luo uusi aihe: </h4>
-        <label> Anna aiheen nimi </label>
-          <input type="text" name="title" value="" size="20" maxlength="64" label ></p>
-        <label> Anna aiheen lyhyt kuvaus </label>
-          <textarea name="description" rows="3" cols="50"></textarea>
-      <p><input type="submit" value="Luo aihe"></p>
-    </form>
-  <hr>
-
-  <h3> Kysymyksen luominen </h3>
-    <form action="/question" method="POST">
-    <p>
-    <h4> Luo uusi kysymys: </h4>
-      <label for="title">Valitse aihe:</label>
-        <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
-      <br>
-      <label for="question_type">Valitse kysymystyyppi:</label>
-        <select name="question_type" id="question_type">
-          <option value="1"> Tosi/Epätosi </option>
-          <option value="2"> Lukuvastaus </option>
-          <option value="3"> Monivalinta </option>
-        </select>
-      <br>
-      <label> Syötä kysymys </label>
-        <textarea name="question" rows="2" cols="50"></textarea>
-      <br>
-        <label> Syötä vastaus </label>
-          {% if question_type == boolean %}
-            <input type="radio" name="answer" value="1">Tosi
-            <input type="radio" name="answer" value="0">Epätosi <br>
-          {% endif %}
-        <p><input type="submit" value="Luo kysymys"></p>
-    </form>
-  <hr>
+  <div class="container">
+    <div class="row">
+      <div class="col-6">
+        <hr>
+        <h3> Aiheen luominen </h3>
+        <form action="/subject" method="POST">
+          <h4> Luo uusi aihe: </h4>
+            <label> Anna aiheen nimi </label>
+              <input type="text" name="title" value="" size="20" maxlength="64" label ></p>
+            <label> Anna aiheen lyhyt kuvaus </label>
+              <textarea name="description" rows="3" cols="50"></textarea>
+            <p><input type="submit" value="Luo aihe"></p>
+        </form>
+      </div>
+    <div class="col-5">
+      <hr>
+      <h3> Kysymyksen luominen </h3>
+        <form action="/question" method="POST">
+          <h4> Luo uusi kysymys: </h4>
+            <label for="title">Valitse aihe:</label>
+            <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
+          <br>
+            <label for="question_type">Valitse kysymystyyppi:</label>
+              <select name="question_type" id="question_type">
+                <option value="1"> Tosi/Epätosi </option>
+                <option value="2"> Lukuvastaus </option>
+                <option value="3"> Monivalinta </option>
+              </select>
+            <br>
+              <label> Syötä kysymys </label>
+                <textarea name="question" rows="2" cols="50"></textarea>
+            <br>
+              <label> Syötä vastaus </label>
+                {% if question_type == boolean %}
+                  <input type="radio" name="answer" value="1">Tosi
+                  <input type="radio" name="answer" value="0">Epätosi <br>
+                {% endif %}
+              <p><input type="submit" value="Luo kysymys"></p>
+          </form>
+        <hr>
+      </div>
+    </div>
+  </div>
 
 </html>

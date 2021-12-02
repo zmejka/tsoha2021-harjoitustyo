@@ -32,10 +32,6 @@ def logout():
         return redirect("/")
     return redirect("/")
 
-@app.route("/error")
-def error():
-    return render_template("error.html")
-
 @app.route("/register")
 def register():
     return render_template("register.html")
@@ -94,30 +90,27 @@ def add_comment():
     title = request.form["title"]
     username_id = users.get_user_id()
     comment = request.form["comment"]
-    title_id = subject.find_subject(title)
-    try:
-        sql = "INSERT INTO comments (title_id, comment, username_id) VALUES (:title_id, :comment, :username_id)"
-        db.session.execute(sql, {"title_id":title_id, "comment":comment, "username_id":username_id})
-        db.session.commit()
-    except:
+    if subject.add_comment(title, username_id, comment):
+        flash("Kommentin lisäys onnistui.")
         return redirect("/main")
-    return redirect("/main")
+    else:
+        flash("Jokin meni vikaan! Kokeile uudelleen.")
+        return redirect("/main")
 
 # ---------------------------------- Questions -------------------------------------------------
 
 @app.route("/question", methods=["POST"])
 def create_queston():
-    title_id = subject.find_subject(request.form["title"])
+    title = request.form["title"]
     question = request.form["question"]
     question_type = request.form["question_type"]
     answer = request.form["answer"]
-    try:
-        sql = "INSERT INTO question (question, question_type, title_id, answer) VALUES (:question, :question_type, :title_id, :answer)"
-        db.session.execute(sql, {"question":question, "question_type":question_type, "title_id":title_id, "answer":answer})
-        db.session.commit()
-    except:
+    if subject.new_question(title, question, question_type, answer):
+        flash("Kysymyksen lisäys onnistui.")
         return redirect("/main")
-    return redirect("/main")
+    else:
+        flash("Jokin meni vikaan! Kokeile uudelleen.")
+        return redirect("/main")
 
 @app.route("/quiz", methods=["POST","GET"])
 def quiz():
@@ -129,7 +122,7 @@ def quiz():
         return render_template("quiz.html", questions=i)
 
 @app.route("/check", methods=["POST"])
-def getAnswer():
+def get_answer():
     right_answer = request.form["answer"]
     value = request.form["value"]
     title_id = request.form["title_id"]
@@ -140,7 +133,7 @@ def getAnswer():
     return render_template("check.html", result=result, title_id=title_id)
 
 @app.route("/return", methods=["POST"])
-def returnToQuiz():
+def return_to_quiz():
     title_id = request.form["title_id"]
     sql = "SELECT id, question, title_id, answer FROM question WHERE title_id = :title_id"
     result = db.session.execute(sql, {"title_id":title_id})

@@ -20,5 +20,22 @@ def question_list(title_id, amount):
             selected_questions.append(questions[i])
     return selected_questions
 
-def get_subject_id():
-    return False
+def add_comment(title, username_id, comment):
+    title_id = find_subject(title)
+    try:
+        sql = "INSERT INTO comments (title_id, comment, username_id) VALUES (:title_id, :comment, :username_id)"
+        db.session.execute(sql, {"title_id":title_id, "comment":comment, "username_id":username_id})
+        db.session.commit()
+    except:
+        return False
+    return True
+
+def new_question(title, question, question_type, answer):
+    title_id = find_subject(title)
+    try:
+        sql = "INSERT INTO question (question, question_type, title_id, answer) VALUES (:question, :question_type, :title_id, :answer)"
+        db.session.execute(sql, {"question":question, "question_type":question_type, "title_id":title_id, "answer":answer})
+        db.session.commit()
+    except:
+        return False
+    return True
