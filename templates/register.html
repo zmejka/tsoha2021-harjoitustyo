@@ -15,19 +15,20 @@
     {% endwith %}
   <base>
     <form action="/new_user" method="POST">
-      <p>Anna tunnus:<br>
+      <p>Anna tunnus (*):<br>
         <input type="text" name="username"></p>
-      <p>Anna salasana:<br>
+      <p>Anna salasana (*):<br>
         <input type="password" name="password1"></p>
-      <p>Toista salasana:<br>
+      <p>Toista salasana (*):<br>
         <input type="password" name="password2"></p>
       <p>Syötä nimi:<br>
         <input type="text" name="name"></p>
-      <p>Valitse rooli</p>
-        <input type="radio" name="role" value="Harjoittelija">Harjoittelija <br>
-        <input type="radio" name="role" value="Ohjaaja">Ohjaaja <br>
+      <p>Valitse rooli (*):</p>
+        <input type="radio" name="role" required="required" value="Harjoittelija">Harjoittelija
+        <input type="radio" name="role" required="required" value="Ohjaaja">Ohjaaja <br>
         <input type="submit" value="Rekisteröidy">
     </form>
+    <p> Tähdellä merkityt kentät ovat pakollisia. </p>
   </base>
 
 {% endblock %}

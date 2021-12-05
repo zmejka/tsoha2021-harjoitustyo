@@ -2,13 +2,32 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <link rel="stylesheet" href="{{ url_for('static', filename='main.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <title>Kyselysovellus</title>
   </head>
+
+  <body style="background-color:Lavender;border-left-width: 0px;border-left-style: solid;margin-left: 15px;margin-right: 15px;border-right-width: 0px;border-right-style: solid;padding-left: 30px;padding-right: 30px;">
+    <br>
+    <h1 style="color:MidnightBlue;text-align:center;">Kysymyksiä - vastauksia!</h1>
+    <h3 style="color:MidnightBlue;text-align:center;">Tietokantasovellus - Tsoha, syksy 2021</h3>
+  </body>
+  <hr>
 
   {% if session.username %}
     <p>Olet kirjautunut nimellä {{ session.username }}</p>
+    <a href="/main">Jatka pääsivulle</a>
+    <br>
     <a href="/logout">Kirjaudu ulos</a>
-  {% else %}
+    {% else %}
+      {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <div style="color:red;text-align:center;">{{ message }}</div>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
     <form action="/login" method="POST">
       <p>Tunnus:<br>
         <input type="text" name="username"></p>

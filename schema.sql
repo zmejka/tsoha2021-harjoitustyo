@@ -22,7 +22,11 @@ CREATE TABLE question (
     question TEXT UNIQUE,
     question_type INT,
     title_id INT,
-    answer INT
+    answer INT,
+    CONSTRAINT pk_title
+      FOREIGN KEY(title_id)
+        REFERENCES subject(id)
+        ON DELETE CASCADE
 );
 
 CREATE TABLE answer (
@@ -30,6 +34,21 @@ CREATE TABLE answer (
     answer TEXT,
     answer_q BOOLEAN,
     question_id INT
+);
+
+CREATE TABLE comments (
+    id SERIAL PRIMARY KEY,
+    title_id INT,
+    comment TEXT,
+    username_id INT,
+    CONSTRAINT pk_title
+      FOREIGN KEY(title_id)
+        REFERENCES subject(id)
+        ON DELETE CASCADE,
+    CONSTRAINT pk_user
+      FOREIGN KEY(username_id)
+        REFERENCES users(id)
+        ON DELETE CASCADE
 );
 
 INSERT INTO users(username, password, name, role) VALUES ('Admin','pbkdf2:sha256:260000$QN2wi2NG4k7HWAJg$67e3583372c67eb4dff60e1af4891cdc80fa9dc8e48eabea5f34bd651cf13715','Admin','Admin');

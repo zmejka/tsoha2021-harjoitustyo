@@ -21,13 +21,15 @@ def login():
         session["username"] = username
         return redirect("/main")
     else:
-        return redirect("/error")
+        flash("Käyttäjätunnus tai salasana ei kelpa.")
+        return redirect("/")
 
 @app.route("/logout")
 def logout():
     try:
         del session["username"]
         del session["csfr_token"]
+        del session["role"]
     except:
         return redirect("/")
     return redirect("/")
@@ -72,6 +74,8 @@ def main():
 
 @app.route("/subject", methods=["POST"])
 def create_subject():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     title = request.form["title"]
     description = request.form["description"]
     username_id = users.get_user_id()
@@ -97,10 +101,25 @@ def add_comment():
         flash("Jokin meni vikaan! Kokeile uudelleen.")
         return redirect("/main")
 
-# ---------------------------------- Questions -------------------------------------------------
+@app.route("/comment_list", methods=["POST"])
+def get_comments():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+    title = request.form["title"]
+    tulos = subject.get_comment(title)
+    if subject.get_comment(title):
+        #flash("Kommentit löytyi.")
+        return redirect("/main")
+    else:
+        flash("Kommenttejä ei löytynyt.")
+        return redirect("/main")
+
+# ---------------------------------- Questions & Quiz -------------------------------------------------
 
 @app.route("/question", methods=["POST"])
 def create_queston():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
     title = request.form["title"]
     question = request.form["question"]
     question_type = request.form["question_type"]
@@ -116,21 +135,28 @@ def create_queston():
 def quiz():
     title = request.form["title"]
     amount = int(request.form["amount"])
+    values = ["Tosi", "Epätosi"]
     title_id = subject.find_subject(title)
+    description = subject.get_description(title)
     questions = subject.question_list(title_id, amount)
-    for i in questions:
-        return render_template("quiz.html", questions=i)
+    return render_template("quiz.html", questions=questions, values=values, amount=amount, description=description, title=title)
 
 @app.route("/check", methods=["POST"])
-def get_answer():
-    right_answer = request.form["answer"]
-    value = request.form["value"]
+def quiz_result():
+    counter = 0
     title_id = request.form["title_id"]
-    if right_answer == value:
-        result = "oikein"
-    else:
-        result = "väärin"
-    return render_template("check.html", result=result, title_id=title_id)
+    amount = int(request.form["amount"])
+    questions = subject.question_list(title_id, amount)
+    for i in questions:
+        number = str(i[0])
+        answer = request.form[number]
+        if answer == "Tosi":
+            value = 1
+        else:
+            value = 0
+        if int(i[3]) == value:
+            counter = counter+1
+    return render_template("check.html", counter=counter)
 
 @app.route("/return", methods=["POST"])
 def return_to_quiz():

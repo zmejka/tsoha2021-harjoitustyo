@@ -1,9 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta charset="utf-8">
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css">
-  </head>
+{% extends "layout.html" %}
+{% block title %}Etusivu{% endblock %}
+{% block content %}
 
   <title>Etusivu</title>
   <h1> Tervetuloa! </h1>
@@ -18,81 +15,92 @@
       {% endif %}
     {% endwith %}
 
-  <p>Olet kirjautunut nimellä {{ session.username }}</p>
-    <a href="/logout">Kirjaudu ulos</a>
+  {% if session.username %}
+    <p>Olet kirjautunut tunnuksella {{ session.username }} ja roolisi on {{ session.role }}</p>
+      <a href="/logout">Kirjaudu ulos</a>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-6">
-        <hr>
-        <h3> Aiheet: </h3>
-          <form action="/quiz" method="POST">
-            <label for="title">Valitse aihe:</label>
-              <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
-            <br>
-            <label for="title">Montako kysymysta?:</label>
-              <input type="text" name="amount" value="" size="10" maxlength="32" label>
-            <p><input type="submit" value="Valitse"></p>
-          </form>
-      </div>
-      <div class="col-5">
-        <hr>
-        <h3> Kysy aiheesta: </h3>
-          <form action="/comment" method="POST">
-            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-            <label for="title">Valitse aihe:</label>
-              <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
-            <br>
-            <label for="comment">Mitä haluat kysyä/kommentoida?:</label>
-              <textarea name="comment" rows="3" cols="50"> </textarea>
-            <p><input type="submit" value="Lähetä"></p>
-          </form>
+      <div class="container">
+        <div class="row">
+          <div class="col-6">
+            <hr>
+            <h3> Aiheet: </h3>
+              <form action="/quiz" method="POST">
+                <label for="title">Valitse aihe:</label>
+                  <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
+                <br>
+                <label for="title">Montako kysymysta?:</label>
+                  <input type="text" name="amount" value="" size="10" maxlength="32" label>
+                <p><input type="submit" value="Valitse"></p>
+              </form>
+          </div>
+          <div class="col-5">
+            <hr>
+            <h3> Kysy aiheesta: </h3>
+              <form action="/comment" method="POST">
+                <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <label for="title">Valitse aihe:</label>
+                  <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
+                <br>
+                <label for="comment">Mitä haluat kysyä/kommentoida?:</label>
+                  <textarea name="comment" rows="3" cols="50"> </textarea>
+                <p><input type="submit" value="Lähetä"></p>
+              </form>
+          <!--    <button onclick="/comment_list">Näyta kommentit!</button>  -->
+          </div>
+
       </div>
     </div>
-  </div>
 
-  <div class="container">
-    <div class="row">
-      <div class="col-6">
-        <hr>
-        <h3> Aiheen luominen </h3>
-        <form action="/subject" method="POST">
-          <h4> Luo uusi aihe: </h4>
-            <label> Anna aiheen nimi </label>
-              <input type="text" name="title" value="" size="20" maxlength="64" label ></p>
-            <label> Anna aiheen lyhyt kuvaus </label>
-              <textarea name="description" rows="3" cols="50"></textarea>
-            <p><input type="submit" value="Luo aihe"></p>
-        </form>
-      </div>
-    <div class="col-5">
-      <hr>
-      <h3> Kysymyksen luominen </h3>
-        <form action="/question" method="POST">
-          <h4> Luo uusi kysymys: </h4>
-            <label for="title">Valitse aihe:</label>
-            <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
-          <br>
-            <label for="question_type">Valitse kysymystyyppi:</label>
-              <select name="question_type" id="question_type">
-                <option value="1"> Tosi/Epätosi </option>
-                <option value="2"> Lukuvastaus </option>
-                <option value="3"> Monivalinta </option>
-              </select>
-            <br>
-              <label> Syötä kysymys </label>
-                <textarea name="question" rows="2" cols="50"></textarea>
-            <br>
-              <label> Syötä vastaus </label>
-                {% if question_type == boolean %}
-                  <input type="radio" name="answer" value="1">Tosi
-                  <input type="radio" name="answer" value="0">Epätosi <br>
-                {% endif %}
-              <p><input type="submit" value="Luo kysymys"></p>
-          </form>
-        <hr>
-      </div>
-    </div>
-  </div>
+      {% if session.role == 'Ohjaaja' %}
+        <div class="container">
+          <div class="row">
+            <div class="col-6">
+              <hr>
+              <h3> Aiheen luominen </h3>
+              <form action="/subject" method="POST">
+                <h4> Luo uusi aihe: </h4>
+                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                  <label> Anna aiheen nimi </label>
+                    <input type="text" name="title" value="" size="20" maxlength="64" label ></p>
+                  <label> Anna aiheen lyhyt kuvaus </label>
+                    <textarea name="description" rows="3" cols="50"></textarea>
+                  <p><input type="submit" value="Luo aihe"></p>
+              </form>
+            </div>
+            <div class="col-5">
+              <hr>
+              <h3> Kysymyksen luominen </h3>
+                <form action="/question" method="POST">
+                  <h4> Luo uusi kysymys: </h4>
+                    <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                    <label for="title">Valitse aihe:</label>
+                      <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
+                  <br>
+                    <label for="question_type">Valitse kysymystyyppi:</label>
+                      <select name="question_type" id="question_type">
+                        <option value="1"> Tosi/Epätosi </option>
+                        <option value="2"> Lukuvastaus </option>
+                        <option value="3"> Monivalinta </option>
+                      </select>
+                  <br>
+                    <label> Syötä kysymys </label>
+                      <textarea name="question" rows="2" cols="50"></textarea>
+                  <br>
+                    <label> Syötä vastaus </label>
+                      {% if question_type == boolean %}
+                        <input type="radio" name="answer" value="1">Tosi
+                        <input type="radio" name="answer" value="0">Epätosi <br>
+                      {% endif %}
+                    <p><input type="submit" value="Luo kysymys"></p>
+                </form>
+              <hr>
+            </div>
+          </div>
+        </div>
+      {% endif %}
+  {% else %}
+    <h3> Et ole kirjautunut! Palaa kirjatumissivulle </h3>
+    <a href="/">Palaa kirjatumissivulle!</a>
+  {% endif %}
 
-</html>
+{% endblock %}

@@ -8,7 +8,14 @@ def find_subject(title):
     title_id = result.fetchone()[0]
     return title_id
 
+def get_description(title):
+    sql = "SELECT description FROM subject WHERE title=:title"
+    result = db.session.execute(sql, {"title":title})
+    description = result.fetchone()[0]
+    return description
+
 def question_list(title_id, amount):
+    # Randomization has not yet been done
     sql = "SELECT id, question, title_id, answer FROM question WHERE title_id = :title_id"
     result = db.session.execute(sql, {"title_id":title_id})
     questions = result.fetchall()
@@ -21,6 +28,7 @@ def question_list(title_id, amount):
     return selected_questions
 
 def add_comment(title, username_id, comment):
+    # comment validation missing
     title_id = find_subject(title)
     try:
         sql = "INSERT INTO comments (title_id, comment, username_id) VALUES (:title_id, :comment, :username_id)"
@@ -29,6 +37,13 @@ def add_comment(title, username_id, comment):
     except:
         return False
     return True
+
+def get_comment(title):
+    title_id = find_subject(title)
+    sql = "SELECT comment FROM comment WHERE (title_id = :title_id)"
+    result = db.session.execute(sql, {"title_id":title_id})
+    comments = result.fetchall()
+    return commnets
 
 def new_question(title, question, question_type, answer):
     title_id = find_subject(title)

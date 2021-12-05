@@ -6,13 +6,13 @@ import os
 def login(username, password):
     sql = "SELECT password, role FROM users WHERE username=:username"
     result = db.session.execute(sql, {"username":username})
-    user = result.fetchone()
+    user = result.fetchall()
     if not user:
         return False
     else:
-        if check_password_hash(user[0], password):
+        if check_password_hash(user[0][0], password):
             session["username"] = username
-            session["role"] = user[1]
+            session["role"] = user[0][1]
             session["csrf_token"] = os.urandom(16).hex()
             return True
         else:
@@ -27,6 +27,13 @@ def get_user_id():
     result = db.session.execute(sql, {"username":username})
     user_id = result.fetchone()[0]
     return user_id
+
+def get_role():
+    username = get_username()
+    sql = "SELECT role FROM users WHERE username=:username"
+    result = db.session.execute(sql, {"username":username})
+    role = result.fetchone()[0]
+    return role
 
 def new_user(username, password, name, role):
     hash_value = generate_password_hash(password)
