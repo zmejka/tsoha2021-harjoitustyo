@@ -20,17 +20,17 @@ Sovellus on testattavissa. Sovellus löytyy osoitteesta: https://tsoha2021-quiza
 
 Sovellukset testaaminen:
 
-- Sovellukseen voi kirjautua, joko luomalla oman tunnuksen tai käyttämällä käyttäjätunnuksia Käyttäjä (salasana: testaus) tai Admin (salasana: admin). Tässä vaiheessa käyttäjäroolien toiminnassa ei ole vielä eroja.
-- Käyttäjä voi luoda aiheita ja lisätä aiheisiin kysymyksiä.
-- Tässä vaiheessa voi luoda ainoastaan Tosi/Epätosi tyyppisiä kysymyksiä.
-- Käyttäjä voi valita aiheen ja aloittaa kysymyksiin vastamista, mutta tämä toiminto on toteutettu vain osittain. Tällä hetkellä kysymys ei vaihdu.
+- Sovellukseen voi kirjautua, joko luomalla oman tunnuksen tai käyttämällä käyttäjätunnuksia:
+  Käyttäjä (salasana: testaus, rooli Ohjaaja), Testaaja (salasana: testaus2, rooli Harjoittelija) tai Admin (salasana: admin). Admin tunnuksen toimintoja ei ole vielä toteutettu, joten sitä ei kannata tässä vaiheessa käyttää.
+- Käyttäjä (rooli Ohjaaja) voi luoda aiheita ja lisätä aiheisiin kysymyksiä. Tällä hetkellä voidaan luoda ainoastaan Tosi/Epätosi tyyppisiä kysymyksiä.
+- Testaaja (rooli Harjoittelija) ja Käyttäjä (rooli Ohjaaja) voivat valita aiheen ja kysymysten määrän sekä suorittaa kyselyn. Tämä toiminto on toteutettu vasta osittain. Tällä hetkellä kysymysten arvonta ei toimi.
+- Käyttäjä näkee aiheen kuvauksen Quiz sivulla.
+- Kyselyn perusteella käyttäjä näkee kuinka moneen kysymykseen on vastattu oikein. 
+- Käyttäjä voi tallentaa aiheeseen liittyvät kommentit tai kysymykset tietokantaan, mutta ne ei vielä pysty sieltä tarkastelemaan.
 
 Puutteet:
 
-- Sovelluksen ulkoasua ei vielä toteutettu
-- Sovelluksen toiminnot on hyvin keskeneräisiä
-- Käyttäjätunnuksen ja salasanan merkkimäärät ei ole rajoitettu
-- Rekisteröitymisestä, aiheiden ja kysymysten luomisen onnistumisestä/epäonnistumisestä ei tule mitään ilmoitusta.
-- Käyttäjätasojen toimintaerot puuttuvat
-- Tietoturva vaatimuksia ei vielä otettu kunnolla huomioon
-- Ohjelman rakennetta ei vielä jäsennetty kunnolla
+- Sovelluksen ulkoasu on puutteellinen
+- Sovelluksen toiminnoista puuttuu vastausten tilastot sekä kommenttien hakeminen. 
+- Tietoturva vaatimuksia on toteutettu vain osittain
+- Admin toiminnot kuten aiheiden, kysymysten ja kommenttien poistot puuttuu.
