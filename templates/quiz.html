@@ -31,7 +31,7 @@
                 <input type="hidden" name="amount" value="{{amount}}">
                 <td>{{ row[1] }}</td>
                   {% for value in values %}
-                <td><input type="radio" value='{{ value }}' name='{{ row[0] }}'/>{{ value }}</td>
+                <td><input type="radio" required="required" value='{{ value }}' name='{{ row[0] }}'/>{{ value }}</td>
                   {% endfor %}
               </tr>
             {% endfor %}
