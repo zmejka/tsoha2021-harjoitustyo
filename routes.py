@@ -64,7 +64,7 @@ def new_user():
             flash("Jokin meni vikaan! Kokeile uudelleen.")
             return redirect("/register")
 
-@app.route("/main")
+@app.route("/main", methods=["POST"])
 def main():
     result = db.session.execute("SELECT title FROM subject")
     title = result.fetchall()
