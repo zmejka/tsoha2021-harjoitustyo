@@ -51,5 +51,13 @@ CREATE TABLE comments (
         ON DELETE CASCADE
 );
 
+CREATE TABLE scores (
+    id SERIAL PRIMARY KEY,
+    username_id INT,
+    title_id INT,
+    all_results INT,
+    score INT
+);
+
 INSERT INTO users(username, password, name, role) VALUES ('Admin','pbkdf2:sha256:260000$QN2wi2NG4k7HWAJg$67e3583372c67eb4dff60e1af4891cdc80fa9dc8e48eabea5f34bd651cf13715','Admin','Admin');
 INSERT INTO users(username, password, name, role) VALUES ('Käyttäjä','pbkdf2:sha256:260000$aJaVz4OKPI8btVZN$61205b521c82d5bb231d1694aaafe9f7ef9d653913855bc215d4511055aa98f1','Tomi Testaaja','Ohjaaja');

@@ -64,7 +64,7 @@ def new_user():
             flash("Jokin meni vikaan! Kokeile uudelleen.")
             return redirect("/register")
 
-@app.route("/main", methods=["POST"])
+@app.route("/main")
 def main():
     result = db.session.execute("SELECT title FROM subject")
     title = result.fetchall()
@@ -108,11 +108,20 @@ def get_comments():
     title = request.form["title"]
     tulos = subject.get_comment(title)
     if subject.get_comment(title):
+        #for row in tulos:
+         #   print("_________________________________", row)
         #flash("Kommentit löytyi.")
-        return redirect("/main")
+        return redirect("/comments/"+title)
     else:
         flash("Kommenttejä ei löytynyt.")
         return redirect("/main")
+
+@app.route("/comments/<title>")
+def comments(title):
+    tulos = subject.get_comment(title)
+    for row in tulos:
+        print("_________________________________", row)
+    return redirect("/main")
 
 # ---------------------------------- Questions & Quiz -------------------------------------------------
 
@@ -145,8 +154,10 @@ def quiz():
 def quiz_result():
     counter = 0
     title_id = request.form["title_id"]
+    username_id = users.get_user_id()
     amount = int(request.form["amount"])
     questions = subject.question_list(title_id, amount)
+    amount = len(questions)
     for i in questions:
         number = str(i[0])
         answer = request.form[number]
@@ -156,7 +167,11 @@ def quiz_result():
             value = 0
         if int(i[3]) == value:
             counter = counter+1
-    return render_template("check.html", counter=counter)
+    score = round(counter/amount*100)
+    subject.add_scores(username_id, title_id, amount, counter)
+    scores = subject.get_score(username_id, title_id)
+    all_score = round(scores[0][1]/scores[0][0]*100)
+    return render_template("check.html", counter=counter, score=score, amount=amount, all_score=all_score)
 
 @app.route("/return", methods=["POST"])
 def return_to_quiz():

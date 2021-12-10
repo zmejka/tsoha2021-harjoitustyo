@@ -7,8 +7,12 @@
     <br>
 
   <title>Vastaus</title>
-  <h1> Sait {{counter}} oikein!</h1>
+  <h1> Sait {{counter}} / {{amount}} oikein!</h1>
   <hr>
+  <h2> Tässä kyselyssä sait {{score}} % oikein! </h2>
+  <hr>
+  <h2> Kaikkien kyselyiden lopputulos on {{all_score}} % oikein! </h2>
+
   <form action="/return" method="POST">
     <input type="hidden" name="title_id" value="{{title_id}}">
   </form>

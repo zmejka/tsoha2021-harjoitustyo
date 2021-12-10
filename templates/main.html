@@ -61,7 +61,7 @@
                 <h4> Luo uusi aihe: </h4>
                   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                   <label> Anna aiheen nimi </label>
-                    <input type="text" name="title" value="" size="20" maxlength="64" label ></p>
+                    <input type="text" name="title" required="required" value="" size="20" maxlength="64" label ></p>
                   <label> Anna aiheen lyhyt kuvaus </label>
                     <textarea name="description" rows="3" cols="50"></textarea>
                   <p><input type="submit" value="Luo aihe"></p>
@@ -77,25 +77,34 @@
                       <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
                   <br>
                     <label for="question_type">Valitse kysymystyyppi:</label>
-                      <select name="question_type" id="question_type">
+                      <select name="question_type" id="question_type" required="required">
                         <option value="1"> Tosi/Epätosi </option>
                         <option value="2"> Lukuvastaus </option>
                         <option value="3"> Monivalinta </option>
                       </select>
                   <br>
                     <label> Syötä kysymys </label>
-                      <textarea name="question" rows="2" cols="50"></textarea>
+                      <textarea name="question" required="required" rows="2" cols="50"></textarea>
                   <br>
                     <label> Syötä vastaus </label>
                       {% if question_type == boolean %}
-                        <input type="radio" name="answer" value="1">Tosi
-                        <input type="radio" name="answer" value="0">Epätosi <br>
+                        <input type="radio" name="answer" required="required" value="1">Tosi
+                        <input type="radio" name="answer" required="required" value="0">Epätosi <br>
                       {% endif %}
                     <p><input type="submit" value="Luo kysymys"></p>
                 </form>
               <hr>
             </div>
-          </div>
+            <div class="row">
+              <h3> Kommentit: </h3>
+                <form action="/comment_list" method="POST">
+                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                  <label for="title">Valitse aihe:</label>
+                    <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
+                  <br>
+                  <p><input type="submit" value="Hae kommentit"></p>
+                </form>
+            </div>
         </div>
       {% endif %}
   {% else %}
