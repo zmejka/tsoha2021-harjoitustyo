@@ -66,9 +66,52 @@ def new_user():
 
 @app.route("/main")
 def main():
-    result = db.session.execute("SELECT title FROM subject")
+    username = users.get_user_id()
+    comments = subject.get_comments(username)
+    print("--------------------------------------------------", comments)
+    sql = "SELECT title FROM subject"
+    result = db.session.execute(sql)
     title = result.fetchall()
-    return render_template("main.html", title = title)
+    return render_template("main.html", title = title, comments=comments)
+
+# -------------------------------- Admin ------------------------------------------------------
+
+@app.route("/administration")
+def administration():
+    userdata = users.get_userdata()
+    titledata = subject.get_titledata()
+    questiondata = subject.get_questiondata()
+    return render_template("administration.html", userdata=userdata, titledata=titledata, questiondata=questiondata)
+
+@app.route("/rm_user", methods=["POST"])
+def remove_user():
+    username_id = int(request.form["username_id"])
+    if users.remove_user(username_id):
+        flash("Käyttäjä on poistettu.")
+        return redirect("/administration")
+    else:
+        flash("Käyttäjän poisto ei ole onnistunut. Kokeile uudelleen.")
+        return redirect("/administration")
+
+@app.route("/rm_title", methods=["POST"])
+def remove_title():
+    title_id = int(request.form["title_id"])
+    if subject.remove_title(title_id):
+        flash("Aihe on poistettu.")
+        return redirect("/administration")
+    else:
+        flash("Aiheen poisto ei ole onnistunut. Kokeile uudelleen.")
+        return redirect("/administration")
+
+@app.route("/rm_question", methods=["POST"])
+def remove_question():
+    question_id = int(request.form["question_id"])
+    if subject.remove_question(question_id):
+        flash("Kysymys on poistettu.")
+        return redirect("/administration")
+    else:
+        flash("Kysymyksen poisto ei ole onnistunut. Kokeile uudelleen.")
+        return redirect("/administration")
 
 # -------------------------------- Subjects ---------------------------------------------------
 
@@ -92,36 +135,16 @@ def add_comment():
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
     title = request.form["title"]
+    resolved = request.form["is_resolved"]
     username_id = users.get_user_id()
     comment = request.form["comment"]
-    if subject.add_comment(title, username_id, comment):
+    if subject.add_comment(title, username_id, comment, resolved):
         flash("Kommentin lisäys onnistui.")
         return redirect("/main")
     else:
         flash("Jokin meni vikaan! Kokeile uudelleen.")
         return redirect("/main")
 
-@app.route("/comment_list", methods=["POST"])
-def get_comments():
-    if session["csrf_token"] != request.form["csrf_token"]:
-        abort(403)
-    title = request.form["title"]
-    tulos = subject.get_comment(title)
-    if subject.get_comment(title):
-        #for row in tulos:
-         #   print("_________________________________", row)
-        #flash("Kommentit löytyi.")
-        return redirect("/comments/"+title)
-    else:
-        flash("Kommenttejä ei löytynyt.")
-        return redirect("/main")
-
-@app.route("/comments/<title>")
-def comments(title):
-    tulos = subject.get_comment(title)
-    for row in tulos:
-        print("_________________________________", row)
-    return redirect("/main")
 
 # ---------------------------------- Questions & Quiz -------------------------------------------------
 
@@ -154,6 +177,7 @@ def quiz():
 def quiz_result():
     counter = 0
     title_id = request.form["title_id"]
+    title = subject.get_title(title_id)
     username_id = users.get_user_id()
     amount = int(request.form["amount"])
     questions = subject.question_list(title_id, amount)
@@ -170,8 +194,10 @@ def quiz_result():
     score = round(counter/amount*100)
     subject.add_scores(username_id, title_id, amount, counter)
     scores = subject.get_score(username_id, title_id)
-    all_score = round(scores[0][1]/scores[0][0]*100)
-    return render_template("check.html", counter=counter, score=score, amount=amount, all_score=all_score)
+    count = scores[1]
+    all_questions = scores[0][0][0]
+    all_score = round(scores[0][0][1]/all_questions*100)
+    return render_template("check.html", counter=counter, score=score, amount=amount, all_score=all_score, count=count, all_questions=all_questions, title=title)
 
 @app.route("/return", methods=["POST"])
 def return_to_quiz():

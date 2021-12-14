@@ -41,6 +41,7 @@ CREATE TABLE comments (
     title_id INT,
     comment TEXT,
     username_id INT,
+    resolved BOOLEAN,
     CONSTRAINT pk_title
       FOREIGN KEY(title_id)
         REFERENCES subject(id)

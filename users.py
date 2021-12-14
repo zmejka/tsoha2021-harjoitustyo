@@ -44,3 +44,18 @@ def new_user(username, password, name, role):
     except:
         return False
     return True
+
+def get_userdata():
+    sql = "SELECT id, username, name, role FROM users ORDER BY role"
+    result = db.session.execute(sql)
+    userdata = result.fetchall()
+    return userdata
+
+def remove_user(user_id):
+    try:
+        sql = "DELETE FROM users WHERE id=:id"
+        db.session.execute(sql, {"id":user_id})
+        db.session.commit()
+    except:
+        return False
+    return True

@@ -1,0 +1,89 @@
+{% extends "layout.html" %}
+{% block title %}Etusivu{% endblock %}
+{% block content %}
+
+  <title>Etusivu</title>
+  <h1> Tervetuloa! </h1>
+  <hr>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <ul class=flashes>
+        {% for message in messages %}
+          <div style="color:red;text-align:center;">{{ message }}</div>
+        {% endfor %}
+        </ul>
+      {% endif %}
+    {% endwith %}
+
+  {% if session.username %}
+    <p>Olet kirjautunut tunnuksella {{ session.username }} ja roolisi on {{ session.role }}</p>
+      <a href="/logout">Kirjaudu ulos</a>
+
+    {% if session.role == 'Admin' %}
+     <h3> Käyttäjät </h3>
+      <table border="1" cellspacing="2">
+        <tr>
+          <th>Käyttäjätunnus</th><th>Nimi</th><th>Rooli</th><th>Poista käyttäjä</th>
+        </tr>
+          <tr>
+            {% for row in userdata %}
+              <tr>
+              <form action="/rm_user" method="POST">
+                <input type="hidden" name="username_id" value="{{row[0]}}">
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+                <td><input type="submit" value="Poista!"></td>
+              </form>
+              </tr>
+            {% endfor %}
+          </tr>
+
+      </table>
+    <hr>
+    <h3> Aiheet </h3>
+      <table border="1" cellspacing="2">
+        <tr>
+          <th>Aihe</th><th>Username</th><th>Poista aihe</th>
+        </tr>
+          <tr>
+            {% for row in titledata %}
+              <tr>
+              <form action="/rm_title" method="POST">
+                <input type="hidden" name="title_id" value="{{row[0]}}">
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td><button type="delete">Poista!</button></td>
+              </form>
+              </tr>
+            {% endfor %}
+          </tr>
+      </table>
+    <hr>
+    <h3> Kysymykset </h3>
+      <table border="1" cellspacing="2">
+        <tr>
+          <th>Kysymys</th><th>Aihe</th><th>Poista kysymys</th>
+        </tr>
+          <tr>
+            {% for row in questiondata %}
+              <tr>
+              <form action="/rm_question" method="POST">
+                <input type="hidden" name="question_id" value="{{row[0]}}">
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td><button type="delete">Poista!</button></td>
+              </form>
+              </tr>
+            {% endfor %}
+          </tr>
+      </table>
+    {% endif %}
+
+    {% else %}
+
+    <h3> Sinulla ei ole hallinto-oikeuksia! Palaa kirjatumissivulle! </h3>
+    <a href="/">Palaa kirjatumissivulle!</a>
+  {% endif %}
+
+{% endblock %}

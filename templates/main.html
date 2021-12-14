@@ -19,6 +19,11 @@
     <p>Olet kirjautunut tunnuksella {{ session.username }} ja roolisi on {{ session.role }}</p>
       <a href="/logout">Kirjaudu ulos</a>
 
+      {% if session.role == 'Admin' %}
+        <h3>Haluatko siirtyä hallintasivulle?</h3>
+          <a href="/administration">Siirry hallintasivulle!</a>
+      {% endif %}
+
       <div class="container">
         <div class="row">
           <div class="col-6">
@@ -38,6 +43,7 @@
             <h3> Kysy aiheesta: </h3>
               <form action="/comment" method="POST">
                 <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                <input type="hidden" name="is_resolved" value="0">
                 <label for="title">Valitse aihe:</label>
                   <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
                 <br>
@@ -45,7 +51,6 @@
                   <textarea name="comment" rows="3" cols="50"> </textarea>
                 <p><input type="submit" value="Lähetä"></p>
               </form>
-          <!--    <button onclick="/comment_list">Näyta kommentit!</button>  -->
           </div>
 
       </div>
@@ -96,14 +101,25 @@
               <hr>
             </div>
             <div class="row">
-              <h3> Kommentit: </h3>
-                <form action="/comment_list" method="POST">
-                  <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
-                  <label for="title">Valitse aihe:</label>
-                    <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
-                  <br>
-                  <p><input type="submit" value="Hae kommentit"></p>
-                </form>
+              <h3> Käyttäjät </h3>
+                <table border="1" cellspacing="2">
+                  <tr>
+                    <th>Aihe</th><th>Kysymys</th><th>Sulje kysymys</th>
+                    </tr>
+                    <tr>
+                      {% for row in comments %}
+                        <tr>
+                          <form action="/resolve_qustion" method="POST">
+                            <input type="hidden" name="comment_id" value="{{row[2]}}">
+                            <td>{{ row[0] }}</td>
+                            <td>{{ row[1] }}</td>
+                            <td><input type="submit" value="Sulje kysymys"></td>
+                          </form>
+                        </tr>
+                      {% endfor %}
+                    </tr>
+                </table>
+            <hr>
             </div>
         </div>
       {% endif %}

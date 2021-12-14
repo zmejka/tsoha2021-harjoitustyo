@@ -1,0 +1,45 @@
+{% extends "layout.html" %}
+{% block title %}Etusivu{% endblock %}
+{% block content %}
+
+  <title>Etusivu</title>
+    <h1> Tervetuloa vastamaan kysymyksiin! </h1>
+    <hr>
+
+    <p>Olet kirjautunut tunnuksella {{ session.username }}</p>
+      <a href="/main">Palaa aihevalintaan</a>
+    <br>
+      <a href="/logout">Kirjaudu ulos</a>
+
+<!--  <hr>
+  <div style="margin: 20px">
+    <h2 >Vastaa kysymyksiin </h2>
+    <body>
+      <p>Kysymykset aiheesta {{title}}!</p>
+      <p>{{description}}</p>
+
+      <table border="0" cellspacing="5">
+        <tr>
+          <th>Kysymys</th><th>Tosi </th><th>Epätosi </th>
+        </tr>
+        <form action="/check" method="POST">
+          <tr>
+            {% for row in questions %}
+              <tr>
+                <input type="hidden" name="question_id" value="{{row[0]}}">
+                <input type="hidden" name="title_id" value="{{row[2]}}">
+                <input type="hidden" name="amount" value="{{amount}}">
+                <td>{{ row[1] }}</td>
+                  {% for value in values %}
+                <td><input type="radio" required="required" value='{{ value }}' name='{{ row[0] }}'/>{{ value }}</td>
+                  {% endfor %}
+              </tr>
+            {% endfor %}
+          </tr>
+          <input type="submit" value="Lukitse" />
+        </form>
+
+      </table>
+  </div> -->
+
+{% endblock %}

@@ -2,19 +2,20 @@
 {% block title %}Etusivu{% endblock %}
 {% block content %}
 
-    <p>Olet kirjautunut nimellä {{ session.username }}</p>
-      <a href="/main">Palaa aihevalintaan</a>
-    <br>
+  <p>Olet kirjautunut nimellä {{ session.username }}</p>
+    <a href="/main">Palaa aihevalintaan</a>
+  <br>
 
   <title>Vastaus</title>
-  <h1> Sait {{counter}} / {{amount}} oikein!</h1>
-  <hr>
-  <h2> Tässä kyselyssä sait {{score}} % oikein! </h2>
-  <hr>
-  <h2> Kaikkien kyselyiden lopputulos on {{all_score}} % oikein! </h2>
+    <h1> Sait {{counter}} / {{amount}} oikein!</h1>
+      <hr>
+      <h2> Tässä kyselyssä sait {{score}} % oikein! </h2>
+      <hr>
+      <h3> Olet vastannut kysymyksiin aiheesta {{title}} yhteensä {{count}} kertaa ja kaiken kaikkiaan {{all_questions}} kysymykseen.  </h3>
+      <h3> Kaikkien vastausten lopputulos on {{all_score}} % oikein! </h3>
 
-  <form action="/return" method="POST">
-    <input type="hidden" name="title_id" value="{{title_id}}">
-  </form>
+    <form action="/return" method="POST">
+      <input type="hidden" name="title_id" value="{{title_id}}">
+    </form>
 
 {% endblock %}
