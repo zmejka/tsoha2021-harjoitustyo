@@ -11,7 +11,16 @@ import subject
 def index():
     return render_template("index.html")
 
-# ----------------------------------------- Users ----------------------------------------------
+@app.route("/main")
+def main():
+    username = users.get_user_id()
+    comments = subject.get_comments(username)
+    sql = "SELECT title FROM subject"
+    result = db.session.execute(sql)
+    title = result.fetchall()
+    return render_template("main.html", title = title, comments=comments)
+
+# -------------------------------------------- Users ----------------------------------------------
 
 @app.route("/login", methods=["POST"])
 def login():
@@ -64,17 +73,7 @@ def new_user():
             flash("Jokin meni vikaan! Kokeile uudelleen.")
             return redirect("/register")
 
-@app.route("/main")
-def main():
-    username = users.get_user_id()
-    comments = subject.get_comments(username)
-    print("--------------------------------------------------", comments)
-    sql = "SELECT title FROM subject"
-    result = db.session.execute(sql)
-    title = result.fetchall()
-    return render_template("main.html", title = title, comments=comments)
-
-# -------------------------------- Admin ------------------------------------------------------
+# --------------------------------------------- Admin ------------------------------------------------------
 
 @app.route("/administration")
 def administration():
@@ -113,7 +112,7 @@ def remove_question():
         flash("Kysymyksen poisto ei ole onnistunut. Kokeile uudelleen.")
         return redirect("/administration")
 
-# -------------------------------- Subjects ---------------------------------------------------
+# ------------------------------------------ Subjects ---------------------------------------------------
 
 @app.route("/subject", methods=["POST"])
 def create_subject():
@@ -145,6 +144,17 @@ def add_comment():
         flash("Jokin meni vikaan! Kokeile uudelleen.")
         return redirect("/main")
 
+@app.route("/resolve_comment", methods=["POST"])
+def resolve():
+    if session["csrf_token"] != request.form["csrf_token"]:
+        abort(403)
+    comment_id = request.form["comment_id"]
+    if subject.resolve(comment_id):
+        flash("Kommentti on suljettu.")
+        return redirect("/main")
+    else:
+        flash("Kommentin päivittäminen ei onnistunut.")
+        return redirect("/main")
 
 # ---------------------------------- Questions & Quiz -------------------------------------------------
 
@@ -199,10 +209,3 @@ def quiz_result():
     all_score = round(scores[0][0][1]/all_questions*100)
     return render_template("check.html", counter=counter, score=score, amount=amount, all_score=all_score, count=count, all_questions=all_questions, title=title)
 
-@app.route("/return", methods=["POST"])
-def return_to_quiz():
-    title_id = request.form["title_id"]
-    sql = "SELECT id, question, title_id, answer FROM question WHERE title_id = :title_id"
-    result = db.session.execute(sql, {"title_id":title_id})
-    questions = result.fetchall()
-    return render_template("quiz.html", questions=questions)

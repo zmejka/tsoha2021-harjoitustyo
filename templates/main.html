@@ -48,7 +48,7 @@
                   <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
                 <br>
                 <label for="comment">Mitä haluat kysyä/kommentoida?:</label>
-                  <textarea name="comment" rows="3" cols="50"> </textarea>
+                  <textarea name="comment" minlength="10" maxlength="120" rows="3" cols="50"> </textarea>
                 <p><input type="submit" value="Lähetä"></p>
               </form>
           </div>
@@ -68,7 +68,7 @@
                   <label> Anna aiheen nimi </label>
                     <input type="text" name="title" required="required" value="" size="20" maxlength="64" label ></p>
                   <label> Anna aiheen lyhyt kuvaus </label>
-                    <textarea name="description" rows="3" cols="50"></textarea>
+                    <textarea name="description" minlength="8" maxlength="150" rows="3" cols="50"></textarea>
                   <p><input type="submit" value="Luo aihe"></p>
               </form>
             </div>
@@ -89,7 +89,7 @@
                       </select>
                   <br>
                     <label> Syötä kysymys </label>
-                      <textarea name="question" required="required" rows="2" cols="50"></textarea>
+                      <textarea name="question" minlength="8" maxlength="100" required="required" rows="2" cols="50"></textarea>
                   <br>
                     <label> Syötä vastaus </label>
                       {% if question_type == boolean %}
@@ -101,19 +101,24 @@
               <hr>
             </div>
             <div class="row">
-              <h3> Käyttäjät </h3>
+              <h3> Kommentit ja kysymyset: </h3>
                 <table border="1" cellspacing="2">
                   <tr>
-                    <th>Aihe</th><th>Kysymys</th><th>Sulje kysymys</th>
+                    <th>Aihe</th><th>Kysymys/Kommentit</th><th>Sulje kysymys/kommentti</th>
                     </tr>
                     <tr>
                       {% for row in comments %}
                         <tr>
-                          <form action="/resolve_qustion" method="POST">
+                          <form action="/resolve_comment" method="POST">
                             <input type="hidden" name="comment_id" value="{{row[2]}}">
+                            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                             <td>{{ row[0] }}</td>
                             <td>{{ row[1] }}</td>
-                            <td><input type="submit" value="Sulje kysymys"></td>
+                            {% if row[3] == false %}
+                              <td><input type="submit" value="Sulje kysymys"></td>
+                            {% else %}
+                              <td>Kysymys on jo suljettu</td>
+                            {% endif %}
                           </form>
                         </tr>
                       {% endfor %}
