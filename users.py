@@ -23,9 +23,12 @@ def get_username():
 
 def get_user_id():
     username = get_username()
-    sql = "SELECT id FROM users WHERE username=:username"
-    result = db.session.execute(sql, {"username":username})
-    user_id = result.fetchone()[0]
+    try:
+        sql = "SELECT id FROM users WHERE username=:username"
+        result = db.session.execute(sql, {"username":username})
+        user_id = result.fetchone()[0]
+    except:
+        return 0
     return user_id
 
 def get_role():

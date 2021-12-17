@@ -14,6 +14,9 @@ def index():
 @app.route("/main")
 def main():
     username = users.get_user_id()
+    if username == 0:
+        flash("Et ole kirjautuneena.")
+        return redirect("/")
     comments = subject.get_comments(username)
     sql = "SELECT title FROM subject"
     result = db.session.execute(sql)

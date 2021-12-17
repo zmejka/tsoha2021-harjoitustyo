@@ -18,6 +18,8 @@
   {% if session.username %}
     <p>Olet kirjautunut tunnuksella {{ session.username }} ja roolisi on {{ session.role }}</p>
       <a href="/logout">Kirjaudu ulos</a>
+    <br>
+    <a href="/main">Palaa pääsivulle!</a>
 
     {% if session.role == 'Admin' %}
      <h3> Käyttäjät </h3>
