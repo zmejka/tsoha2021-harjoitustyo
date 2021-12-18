@@ -15,3 +15,17 @@ td, th {
     border-color: black;
     border-width: 1px;
 }
+
+f_text {
+    margin: auto;
+    max-width: 45em;
+    font-family: 'Helvetica', 'Arial', sans-serif;
+    background-color: #ddffff;
+}
+
+.button_f {
+    font-size: 16px;
+    padding: auto;
+    border-radius: 10%;
+    background-color: #ffffff;
+}

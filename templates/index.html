@@ -12,6 +12,22 @@
     <h3 style="color:MidnightBlue;text-align:center;">Tietokantasovellus - Tsoha, syksy 2021</h3>
   </body>
   <hr>
+    <style>
+    h1 {text-align: center;}
+    hr {color: #9370DB; }
+
+    input[type=button], input[type=submit], input[type=reset] {
+      background-color: #9370DB;
+      border: none;
+      border-radius: 5px;
+      color: #000080;
+      padding: 8px 24px;
+      text-decoration: none;
+      margin: 6px 3px;
+      cursor: pointer;
+    }
+
+  </style>
 
   {% if session.username %}
     <p>Olet kirjautunut nimellä {{ session.username }}</p>
@@ -38,5 +54,11 @@
     <hr>
     <a href="/register">Rekisteröidy</a>
   {% endif %}
+
+  <footer class="f_text" style="position: fixed; bottom: 0px; width: 100%;">
+    <div class="f_text" style="background-color: rgb(225, 230, 255); color: MidnightBlue">
+      Tietokantasovellus harjoitustyö - Evgeniia Minaeva
+    </div>
+  </footer>
 
 </html>

@@ -20,7 +20,7 @@
 
       <table border="0" cellspacing="5">
         <tr>
-          <th>Kysymys</th><th>Tosi </th><th>Epätosi </th>
+          <th style="width: 70%">Kysymys</th><th>Tosi </th><th>Epätosi </th>
         </tr>
         <form action="/check" method="POST">
           <tr>
@@ -28,6 +28,7 @@
               <tr>
                 <input type="hidden" name="question_id" value="{{row[0]}}">
                 <input type="hidden" name="title_id" value="{{row[2]}}">
+                <input type="hidden" name="answer" value="{{row[3]}}">
                 <input type="hidden" name="amount" value="{{amount}}">
                 <td>{{ row[1] }}</td>
                   {% for value in values %}
@@ -36,7 +37,7 @@
               </tr>
             {% endfor %}
           </tr>
-          <input type="submit" value="Lukitse" />
+          <input type="submit" value="Lukitse">
         </form>
 
       </table>

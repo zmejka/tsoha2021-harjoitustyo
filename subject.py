@@ -24,6 +24,15 @@ def get_description(title):
     description = result.fetchone()[0]
     return description
 
+def new_subject(title, description, username_id):
+    try:
+        sql = "INSERT INTO subject (title, description, username_id) VALUES (:title, :description, :username_id)"
+        db.session.execute(sql, {"title":title, "description":description, "username_id":username_id})
+        db.session.commit()
+    except:
+        return False
+    return True
+
 def get_titledata():
     sql = "SELECT subject.id, subject.title, users.username FROM subject, users WHERE subject.username_id=users.id ORDER BY username"
     result = db.session.execute(sql)
@@ -55,6 +64,12 @@ def question_list(title_id, amount):
             selected_questions.append(shuffled_questions[i])
     return selected_questions
 
+def all_questions(title_id):
+    sql = "SELECT id, question, title_id, answer FROM question WHERE title_id = :title_id"
+    result = db.session.execute(sql, {"title_id":title_id})
+    questions_data = result.fetchall()
+    return questions_data
+
 def new_question(title, question, question_type, answer):
     title_id = find_subject(title)
     try:
@@ -75,6 +90,15 @@ def remove_question(question_id):
     try:
         sql = "DELETE FROM question WHERE id=:id"
         db.session.execute(sql, {"id":question_id})
+        db.session.commit()
+    except:
+        return False
+    return True
+
+def edit_question(question_id, new_value):
+    try:
+        sql = "UPDATE question SET question=:new_value WHERE id=:id"
+        db.session.execute(sql, {"new_value":new_value, "id":question_id})
         db.session.commit()
     except:
         return False

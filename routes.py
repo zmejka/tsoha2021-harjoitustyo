@@ -115,6 +115,17 @@ def remove_question():
         flash("Kysymyksen poisto ei ole onnistunut. Kokeile uudelleen.")
         return redirect("/administration")
 
+@app.route("/ed_question", methods=["POST"])
+def edit_question():
+    question_id = int(request.form["question_id"])
+    new_value = request.form["new_value"]
+    if subject.edit_question(question_id, new_value):
+        flash("Kysymys on muokattu.")
+        return redirect("/administration")
+    else:
+        flash("Kysymyksen muokkaus ei ole onnistunut. Kokeile uudelleen.")
+        return redirect("/administration")
+
 # ------------------------------------------ Subjects ---------------------------------------------------
 
 @app.route("/subject", methods=["POST"])
@@ -124,13 +135,12 @@ def create_subject():
     title = request.form["title"]
     description = request.form["description"]
     username_id = users.get_user_id()
-    try:
-        sql = "INSERT INTO subject (title, description, username_id) VALUES (:title, :description, :username_id)"
-        db.session.execute(sql, {"title":title, "description":description, "username_id":username_id})
-        db.session.commit()
-    except:
+    if subject.new_subject(title, description, username_id):
+        flash("Aiheen lisäys onnistui.")
         return redirect("/main")
-    return redirect("/main")
+    else:
+        flash("Jokin meni vikaan! Kokeile uudelleen.")
+        return redirect("/main")
 
 @app.route("/comment", methods=["POST"])
 def add_comment():
@@ -192,23 +202,28 @@ def quiz_result():
     title_id = request.form["title_id"]
     title = subject.get_title(title_id)
     username_id = users.get_user_id()
+    questions = subject.all_questions(title_id)
     amount = int(request.form["amount"])
-    questions = subject.question_list(title_id, amount)
-    amount = len(questions)
+    num = 0
     for i in questions:
         number = str(i[0])
-        answer = request.form[number]
+        try:
+            request.form[number]
+            answer = request.form[number]
+        except:
+            continue
+        num = num+1
         if answer == "Tosi":
             value = 1
         else:
             value = 0
         if int(i[3]) == value:
             counter = counter+1
-    score = round(counter/amount*100)
+    score = round(counter/num*100)
     subject.add_scores(username_id, title_id, amount, counter)
     scores = subject.get_score(username_id, title_id)
     count = scores[1]
     all_questions = scores[0][0][0]
     all_score = round(scores[0][0][1]/all_questions*100)
-    return render_template("check.html", counter=counter, score=score, amount=amount, all_score=all_score, count=count, all_questions=all_questions, title=title)
+    return render_template("check.html", counter=counter, score=score, num=num, all_score=all_score, count=count, all_questions=all_questions, title=title)
 

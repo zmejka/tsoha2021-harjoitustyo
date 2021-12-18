@@ -55,7 +55,7 @@
                 <input type="hidden" name="title_id" value="{{row[0]}}">
                 <td>{{ row[1] }}</td>
                 <td>{{ row[2] }}</td>
-                <td><button type="delete">Poista!</button></td>
+                <td><input type="submit" value="Poista!"></td>
               </form>
               </tr>
             {% endfor %}
@@ -65,7 +65,7 @@
     <h3> Kysymykset </h3>
       <table border="1" cellspacing="2">
         <tr>
-          <th>Kysymys</th><th>Aihe</th><th>Poista kysymys</th>
+          <th style="width: 55%;">Kysymys</th><th>Aihe</th><th>Poista kysymys</th><th>Muokkaa kysymys</th><th>Vahvista muokkaus</th>
         </tr>
           <tr>
             {% for row in questiondata %}
@@ -74,7 +74,12 @@
                 <input type="hidden" name="question_id" value="{{row[0]}}">
                 <td>{{ row[1] }}</td>
                 <td>{{ row[2] }}</td>
-                <td><button type="delete">Poista!</button></td>
+                <td><input type="submit" value="Poista!"></td>
+              </form>
+              <form action="/ed_question" method="POST">
+                <input type="hidden" name="question_id" value="{{row[0]}}">
+                <td><input type="text" name="new_value" value="{{row[1]}}"></td>
+                <td><input type="submit" value="Vahvista!"></td>
               </form>
               </tr>
             {% endfor %}
@@ -87,5 +92,7 @@
     <h3> Sinulla ei ole hallinto-oikeuksia! Palaa kirjatumissivulle! </h3>
     <a href="/">Palaa kirjatumissivulle!</a>
   {% endif %}
-
+    <br>
+    <br>
+    <br>
 {% endblock %}
