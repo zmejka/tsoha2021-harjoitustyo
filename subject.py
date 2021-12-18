@@ -24,6 +24,13 @@ def get_description(title):
     description = result.fetchone()[0]
     return description
 
+def own_subjects():
+    username_id = users.get_user_id()
+    sql = "SELECT title FROM subject WHERE username_id=:username_id"
+    result = db.session.execute(sql, {"username_id":username_id})
+    own_subjects = result.fetchall()
+    return own_subjects
+
 def new_subject(title, description, username_id):
     try:
         sql = "INSERT INTO subject (title, description, username_id) VALUES (:title, :description, :username_id)"
@@ -127,7 +134,6 @@ def get_score(username_id, title_id):
 # ------------------------------------------------------------ Comments ---------------------------------------------------
 
 def add_comment(title, username_id, comment, resolved):
-    # comment validation missing
     title_id = find_subject(title)
     try:
         sql = "INSERT INTO comments (title_id, comment, username_id, resolved) VALUES (:title_id, :comment, :username_id, :resolved)"

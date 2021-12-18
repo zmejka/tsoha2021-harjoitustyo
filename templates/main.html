@@ -28,9 +28,9 @@ h1 {text-align: center;}
           <a href="/administration">Siirry hallintasivulle!</a>
       {% endif %}
 
-      <div class="container-fluid">
+      <div class="container-fluid" style="width=100%">
         <div class="row">
-          <div class="col-6">
+          <div style="width=80%" class="col-6">
             <hr>
             <h3> Aiheet: </h3>
               <form id="quiz" action="/quiz" method="POST" onsubmit="return check_quiz(this)">
@@ -42,7 +42,7 @@ h1 {text-align: center;}
                 <p><input class="button_f" type="submit" value="Valitse"></p>
               </form>
           </div>
-          <div class="col-6">
+          <div style="width=80%" class="col-6">
             <hr>
             <h3> Kysy aiheesta: </h3>
               <form id="f1" action="/comment" method="POST" onsubmit="return check_comment(this)">
@@ -52,7 +52,7 @@ h1 {text-align: center;}
                   <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
                 <br>
                 <label for="comment">Mitä haluat kommentoida? </label>
-                  <textarea style="vertical-align: middle;" name="comment" id="comment" required="required" minlength="10" maxlength="150" rows="3" cols="50"> </textarea>
+                  <textarea style="vertical-align: middle;" name="comment" id="comment" required="required" minlength="10" maxlength="150" rows="3" cols="40"> </textarea>
                 <p><input type="submit" value="Lähetä"></p>
               </form>
           </div>
@@ -61,30 +61,30 @@ h1 {text-align: center;}
     </div>
 
       {% if session.role == 'Ohjaaja' %}
-        <div class="container-fluid">
+        <div class="container-fluid" style="width=100%">
           <div class="row">
-            <div class="col-6">
+            <div style="width=100%" class="col-6">
               <hr>
               <h3> Aiheen luominen </h3>
               <form action="/subject" method="POST" onsubmit="return check_title(this)">
                 <h4> Luo uusi aihe: </h4>
                   <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                   <label> Anna aiheen nimi </label>
-                    <input type="text" name="title" required minlength="5" maxlength="30" value="" size="30" maxlength="64" label ></p>
+                    <input type="text" name="title" required minlength="5" maxlength="30" value="" size="30" label ></p>
                   <label> Anna aiheen lyhyt kuvaus </label>
-                    <textarea style="vertical-align: middle;" name="description" required minlength="8" maxlength="150" rows="4" cols="50"></textarea>
+                    <textarea style="vertical-align: middle;" name="description" required minlength="8" maxlength="200" rows="4" cols="40"></textarea>
                   <p><input type="submit" value="Luo aihe"></p>
               </form>
               <hr>
             </div>
-            <div class="col-6">
+            <div style="width=100%" class="col-6">
               <hr>
               <h3> Kysymyksen luominen </h3>
                 <form action="/question" method="POST" onsubmit="return check_question(this)">
                   <h4> Luo uusi kysymys: </h4>
                     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                     <label for="title">Valitse aihe:</label>
-                      <select name="title" id="title"> {% for result in title %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
+                      <select name="title" id="title"> {% for result in own_subjects %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
                   <br>
                     <label for="question_type">Valitse kysymystyyppi:</label>
                       <select name="question_type" id="question_type" required="required">
@@ -94,7 +94,7 @@ h1 {text-align: center;}
                       </select>
                   <br>
                     <label> Syötä kysymys </label>
-                      <textarea style="vertical-align: middle;" name="question" required="required" minlength="8" maxlength="200" required="required" rows="2" cols="50"></textarea>
+                      <textarea style="vertical-align: middle;" name="question" required="required" minlength="8" maxlength="200" required="required" rows="2" cols="40"></textarea>
                   <br>
                     <label> Syötä vastaus </label>
                       {% if question_type == boolean %}

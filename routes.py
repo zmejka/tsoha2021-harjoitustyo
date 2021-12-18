@@ -21,7 +21,8 @@ def main():
     sql = "SELECT title FROM subject"
     result = db.session.execute(sql)
     title = result.fetchall()
-    return render_template("main.html", title = title, comments=comments)
+    own_subjects = subject.own_subjects()
+    return render_template("main.html", title = title, comments=comments, own_subjects=own_subjects)
 
 # -------------------------------------------- Users ----------------------------------------------
 
@@ -133,7 +134,13 @@ def create_subject():
     if session["csrf_token"] != request.form["csrf_token"]:
         abort(403)
     title = request.form["title"]
+    if len(title) <6:
+        flash("Aiheen nimi on liian lyhyt.")
+        return redirect("/main")
     description = request.form["description"]
+    if len(description) <10:
+        flash("Kuvaus on liian lyhyt.")
+        return redirect("/main")
     username_id = users.get_user_id()
     if subject.new_subject(title, description, username_id):
         flash("Aiheen lisäys onnistui.")
@@ -150,6 +157,9 @@ def add_comment():
     resolved = request.form["is_resolved"]
     username_id = users.get_user_id()
     comment = request.form["comment"]
+    if len(comment) <6:
+        flash("Kommentti on liian lyhyt.")
+        return redirect("/main")
     if subject.add_comment(title, username_id, comment, resolved):
         flash("Kommentin lisäys onnistui.")
         return redirect("/main")
@@ -177,6 +187,9 @@ def create_queston():
         abort(403)
     title = request.form["title"]
     question = request.form["question"]
+    if len(question) <6:
+        flash("Kysymys tai väite on liian lyhyt.")
+        return redirect("/main")
     question_type = request.form["question_type"]
     answer = request.form["answer"]
     if subject.new_question(title, question, question_type, answer):
