@@ -3,7 +3,9 @@
 {% block content %}
 
   <title>Etusivu</title>
-  <h1> Tervetuloa! </h1>
+    <div style="background-color:#87CEFA;">
+      <h1> Tervetuloa! </h1>
+    </div>
   <hr>
     {% with messages = get_flashed_messages() %}
       {% if messages %}
@@ -16,20 +18,20 @@
     {% endwith %}
 
   {% if session.username %}
-    <p>Olet kirjautunut tunnuksella {{ session.username }} ja roolisi on {{ session.role }}</p>
+    <p>Olet kirjautunut tunnuksella <strong>{{ session.username }}</strong> ja roolisi on <strong>{{ session.role }}</strong></p>
       <a href="/logout">Kirjaudu ulos</a>
     <br>
     <a href="/main">Palaa pääsivulle!</a>
 
     {% if session.role == 'Admin' %}
-     <h3> Käyttäjät </h3>
-      <table border="1" cellspacing="2">
+      <h3> Käyttäjät </h3>
+        <table border="1" cellspacing="2">
         <tr>
           <th>Käyttäjätunnus</th><th>Nimi</th><th>Rooli</th><th>Poista käyttäjä</th>
         </tr>
-          <tr>
-            {% for row in userdata %}
-              <tr>
+        <tr>
+          {% for row in userdata %}
+            <tr>
               <form action="/rm_user" method="POST">
                 <input type="hidden" name="username_id" value="{{row[0]}}">
                 <td>{{ row[1] }}</td>
@@ -37,17 +39,16 @@
                 <td>{{ row[3] }}</td>
                 <td><input type="submit" value="Poista!"></td>
               </form>
-              </tr>
-            {% endfor %}
-          </tr>
-
-      </table>
-    <hr>
-    <h3> Aiheet </h3>
-      <table border="1" cellspacing="2">
-        <tr>
-          <th>Aihe</th><th>Username</th><th>Poista aihe</th>
+            </tr>
+          {% endfor %}
         </tr>
+        </table>
+      <hr>
+      <h3> Aiheet </h3>
+        <table border="1" cellspacing="2">
+          <tr>
+            <th>Aihe</th><th>Username</th><th>Poista aihe</th>
+          </tr>
           <tr>
             {% for row in titledata %}
               <tr>
@@ -60,13 +61,13 @@
               </tr>
             {% endfor %}
           </tr>
-      </table>
-    <hr>
-    <h3> Kysymykset </h3>
-      <table border="1" cellspacing="2">
-        <tr>
-          <th style="width: 55%;">Kysymys</th><th>Aihe</th><th>Poista kysymys</th><th>Muokkaa kysymys</th><th>Vahvista muokkaus</th>
-        </tr>
+        </table>
+      <hr>
+      <h3> Kysymykset </h3>
+        <table border="1" cellspacing="2">
+          <tr>
+            <th style="width: 55%;">Kysymys</th><th>Aihe</th><th>Poista kysymys</th><th>Muokkaa kysymys</th><th>Vahvista muokkaus</th>
+          </tr>
           <tr>
             {% for row in questiondata %}
               <tr>
@@ -84,14 +85,12 @@
               </tr>
             {% endfor %}
           </tr>
-      </table>
+        </table>
     {% endif %}
-
     {% else %}
-
     <h3> Sinulla ei ole hallinto-oikeuksia! Palaa kirjatumissivulle! </h3>
     <a href="/">Palaa kirjatumissivulle!</a>
-  {% endif %}
+    {% endif %}
     <br>
     <br>
     <br>

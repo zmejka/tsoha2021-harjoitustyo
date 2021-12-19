@@ -18,11 +18,12 @@ def main():
         flash("Et ole kirjautuneena.")
         return redirect("/")
     comments = subject.get_comments(username)
+    all_comments = subject.all_comments()
     sql = "SELECT title FROM subject"
     result = db.session.execute(sql)
     title = result.fetchall()
     own_subjects = subject.own_subjects()
-    return render_template("main.html", title = title, comments=comments, own_subjects=own_subjects)
+    return render_template("main.html", title = title, comments=comments, own_subjects=own_subjects, all_comments=all_comments)
 
 # -------------------------------------------- Users ----------------------------------------------
 
@@ -34,7 +35,7 @@ def login():
         session["username"] = username
         return redirect("/main")
     else:
-        flash("Käyttäjätunnus tai salasana ei kelpa.")
+        flash("Käyttäjätunnus tai salasana ei kelpaa.")
         return redirect("/")
 
 @app.route("/logout")
@@ -55,7 +56,7 @@ def register():
 def new_user():
     ''' Creating new user '''
     if request.method == "GET":
-        return render_template("regiter.html")
+        return render_template("register.html")
     if request.method == "POST":
         username = request.form["username"]
         if len(username) < 2:
@@ -69,7 +70,7 @@ def new_user():
             flash("Salasana on liian lyhyt.")
             return redirect("/register")
         if password1 != password2:
-            flash("Salasanat eivät täsmä.")
+            flash("Salasanat eivät täsmää.")
             return redirect("/register")
         if users.new_user(username, password1, name, role):
             return redirect("/")
@@ -93,7 +94,7 @@ def remove_user():
         flash("Käyttäjä on poistettu.")
         return redirect("/administration")
     else:
-        flash("Käyttäjän poisto ei ole onnistunut. Kokeile uudelleen.")
+        flash("Käyttäjän poisto ei onnistunut. Kokeile uudelleen.")
         return redirect("/administration")
 
 @app.route("/rm_title", methods=["POST"])
@@ -103,7 +104,7 @@ def remove_title():
         flash("Aihe on poistettu.")
         return redirect("/administration")
     else:
-        flash("Aiheen poisto ei ole onnistunut. Kokeile uudelleen.")
+        flash("Aiheen poisto ei onnistunut. Kokeile uudelleen.")
         return redirect("/administration")
 
 @app.route("/rm_question", methods=["POST"])
@@ -113,7 +114,7 @@ def remove_question():
         flash("Kysymys on poistettu.")
         return redirect("/administration")
     else:
-        flash("Kysymyksen poisto ei ole onnistunut. Kokeile uudelleen.")
+        flash("Kysymyksen poisto ei onnistunut. Kokeile uudelleen.")
         return redirect("/administration")
 
 @app.route("/ed_question", methods=["POST"])
@@ -124,8 +125,18 @@ def edit_question():
         flash("Kysymys on muokattu.")
         return redirect("/administration")
     else:
-        flash("Kysymyksen muokkaus ei ole onnistunut. Kokeile uudelleen.")
+        flash("Kysymyksen muokkaus ei onnistunut. Kokeile uudelleen.")
         return redirect("/administration")
+
+@app.route("/rm_comment", methods=["POST"])
+def remove_comment():
+    comment_id = int(request.form["comment_id"])
+    if subject.remove_comment(comment_id):
+        flash("Kommentti on poistettu.")
+        return redirect("/main")
+    else:
+        flash("Kommentin poisto ei onnistunut. Kokeile uudelleen.")
+        return redirect("/main")
 
 # ------------------------------------------ Subjects ---------------------------------------------------
 
@@ -202,11 +213,19 @@ def create_queston():
 @app.route("/quiz", methods=["POST","GET"])
 def quiz():
     title = request.form["title"]
-    amount = int(request.form["amount"])
-    values = ["Tosi", "Epätosi"]
+    amount = request.form["amount"]
     title_id = subject.find_subject(title)
+    try:
+        amount=int(amount)
+        questions = subject.question_list(title_id, amount)
+    except:
+        flash("Syötä numero!")
+        return redirect("/main")
+    values = ["Tosi", "Epätosi"]
     description = subject.get_description(title)
-    questions = subject.question_list(title_id, amount)
+    if len(questions) < 1:
+        flash("Aihe ei sisällä yhtään kysymystä.")
+        return redirect("/main")
     return render_template("quiz.html", questions=questions, values=values, amount=amount, description=description, title=title)
 
 @app.route("/check", methods=["POST"])

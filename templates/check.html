@@ -14,8 +14,4 @@
       <p> Olet vastannut kysymyksiin aiheesta {{title}} yhteensä <strong>{{count}}</strong> kertaa ja kaiken kaikkiaan <strong>{{all_questions}}</strong> kysymykseen.  </p>
       <p> Kaikkien vastausten lopputulos on <strong>{{all_score}} % </strong> oikein! </p>
 
-    <form action="/return" method="POST">
-      <input type="hidden" name="title_id" value="{{title_id}}">
-    </form>
-
 {% endblock %}

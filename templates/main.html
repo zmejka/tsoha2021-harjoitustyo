@@ -7,6 +7,7 @@ h1 {text-align: center;}
 </style>
 
   <title>Etusivu</title>
+  <div style="background-color:#87CEFA;">
   <h1>  Tervetuloa! </h1>
   <hr>
     {% with messages = get_flashed_messages() %}
@@ -18,6 +19,7 @@ h1 {text-align: center;}
         </ul>
       {% endif %}
     {% endwith %}
+  </div>
 
   {% if session.username %}
     <p>Olet kirjautunut tunnuksella <strong>{{ session.username }}</strong> ja roolisi on <strong>{{ session.role }}</strong></p>
@@ -60,7 +62,7 @@ h1 {text-align: center;}
       </div>
     </div>
 
-      {% if session.role == 'Ohjaaja' %}
+      {% if session.role == 'Ohjaaja' or session.role == 'Admin' %}
         <div class="container-fluid" style="width=100%">
           <div class="row">
             <div style="width=100%" class="col-6">
@@ -114,9 +116,10 @@ h1 {text-align: center;}
               <br>
                 <table border="1" cellspacing="2">
                   <tr>
-                    <th>Aihe</th><th>Kysymys/Kommentit</th><th>Sulje kysymys/kommentti</th>
+                    <th>Aihe</th><th>Kysymys/Kommentit</th><th>Sulje kysymys/kommentti</th><th>Poista kysymys/kommentti</th>
                     </tr>
                     <tr>
+                    {% if session.role == 'Ohjaaja' %}
                       {% for row in comments %}
                         <tr>
                           <form action="/resolve_comment" method="POST">
@@ -130,8 +133,30 @@ h1 {text-align: center;}
                               <td>Kysymys on jo suljettu</td>
                             {% endif %}
                           </form>
+                          <td><p> Et voi poista kommenttia </p></td>
                       </tr>
                     {% endfor %}
+                  {% else %}
+                    {% for row in all_comments %}
+                        <tr>
+                          <form action="/resolve_comment" method="POST">
+                            <input type="hidden" name="comment_id" value="{{row[2]}}">
+                            <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
+                            <td>{{ row[0] }}</td>
+                            <td>{{ row[1] }}</td>
+                            {% if row[3] == false %}
+                              <td><input type="submit" value="Sulje kysymys"></td>
+                            {% else %}
+                              <td>Kysymys on jo suljettu</td>
+                            {% endif %}
+                          </form>
+                          <form action="/rm_comment" method="POST">
+                              <input type="hidden" name="comment_id" value="{{row[2]}}">
+                              <td><input type="submit" value="Poista!"></td>
+                          </form>
+                      </tr>
+                    {% endfor %}
+                  {% endif %}
                   </tr>
                 </table>
           </div>

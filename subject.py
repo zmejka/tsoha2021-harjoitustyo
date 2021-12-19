@@ -150,10 +150,25 @@ def get_comments(username):
     comments = result.fetchall()
     return comments
 
+def all_comments():
+    sql = "SELECT subject.title, comments.comment, comments.id, comments.resolved FROM subject, comments WHERE (subject.id=comments.title_id) ORDER BY title"
+    result = db.session.execute(sql)
+    all_comments = result.fetchall()
+    return all_comments
+
 def resolve(comment_id):
     try:
         sql = "UPDATE comments SET resolved = 'True' WHERE (id = :comment_id)"
         db.session.execute(sql, {"comment_id":comment_id})
+        db.session.commit()
+    except:
+        return False
+    return True
+
+def remove_comment(comment_id):
+    try:
+        sql = "DELETE FROM comments WHERE id=:id"
+        db.session.execute(sql, {"id":comment_id})
         db.session.commit()
     except:
         return False
