@@ -116,7 +116,7 @@ h1 {text-align: center;}
               <br>
                 <table border="1" cellspacing="2">
                   <tr>
-                    <th>Aihe</th><th>Kysymys/Kommentit</th><th>Sulje kysymys/kommentti</th><th>Poista kysymys/kommentti</th>
+                    <th>Aihe</th><th>Kysymys/Kommentti</th><th>Sulje kysymys/kommentti</th><th>Poista kysymys/kommentti</th>
                     </tr>
                     <tr>
                     {% if session.role == 'Ohjaaja' %}
@@ -133,7 +133,7 @@ h1 {text-align: center;}
                               <td>Kysymys on jo suljettu</td>
                             {% endif %}
                           </form>
-                          <td><p> Et voi poista kommenttia </p></td>
+                          <td><p> Et voi poistaa kommenttia </p></td>
                       </tr>
                     {% endfor %}
                   {% else %}
@@ -164,8 +164,8 @@ h1 {text-align: center;}
       </div>
       {% endif %}
   {% else %}
-    <h3> Et ole kirjautunut! Palaa kirjatumissivulle </h3>
-    <a href="/">Palaa kirjatumissivulle!</a>
+    <h3> Et ole kirjautunut! Palaa kirjautumissivulle </h3>
+    <a href="/">Palaa kirjautumissivulle!</a>
   {% endif %}
   <hr>
   <br>
