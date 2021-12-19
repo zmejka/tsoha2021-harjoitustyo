@@ -218,6 +218,7 @@ def quiz():
     try:
         amount=int(amount)
         questions = subject.question_list(title_id, amount)
+        amount=len(questions)
     except:
         flash("Syötä numero!")
         return redirect("/main")

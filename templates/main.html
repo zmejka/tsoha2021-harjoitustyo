@@ -86,7 +86,7 @@ h1 {text-align: center;}
                   <h4> Luo uusi kysymys: </h4>
                     <input type="hidden" name="csrf_token" value="{{ session.csrf_token }}">
                     <label for="title">Valitse aihe:</label>
-                      <select name="title" id="title"> {% for result in own_subjects %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
+                      <select name="title" id="title" required> {% for result in own_subjects %} <option value="{{ result[0] }}"> {{ result[0] }} </option> {% endfor %}  </select>
                   <br>
                     <label for="question_type">Valitse kysymystyyppi:</label>
                       <select name="question_type" id="question_type" required="required">

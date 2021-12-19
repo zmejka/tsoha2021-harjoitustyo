@@ -1,36 +1,49 @@
 # tsoha2021-harjoitustyo
+## Kyselysovellus
 
-Sovelluksen voidaan käyttää opitun tiedon harjoittelemiseen kysymyssettien avulla. Kysymysten vastausvaihtoehtoja voivat olla tosi tai epätosi, valitse oikea vaihtoehto tai jokin lukuarvo tai sana.
+Sovellus on Helsingin Yliopiston Tietokantasovellus harjoitustyökurssin projekti.
 
-Sovelluksessa on kolme käyttäjätasoa: Admin, Ohjaaja ja Harjoittelija. Admin voi hallinnoida sovellusta esimerkiksi poistamalla käyttäjiä, aiheita ja viestejä. Ohjaaja voi luoda sovellukseen aiheita, kysymyksiä ja vastausvaihtoehtoja. Harjoittelija voi vastata kysymyksiin ja seurata kehitystään.
+Sovellusta voidaan käyttää opitun tiedon harjoittelemiseen kysymyssettien avulla.
 
-Sovelluksen ominaisuuksia ovat:
+Sovelluksessa on kolme käyttäjätasoa: Admin, Ohjaaja ja Harjoittelija. Admin voi hallinnoida sovellusta esimerkiksi poistamalla käyttäjiä, aiheita ja kommentteja. Ohjaaja voi luoda sovellukseen aiheita, kysymyksiä ja vastausvaihtoehtoja. Kaikki käyttäjäroolit voivat vastata kysymyksiin ja seurata kehitystään.
+
+#### Sovelluksen ominaisuuksia ovat:
 
 - Käyttäjä voi luoda tunnuksen ja kirjautua sovellukseen sisään.
+    + Tämä toiminto on toteutettu kokonaisuudessa.
 - Admin voi luoda toisen admin käyttäjän
+    + Tämä toiminto on mahdollinen jatkokehityskohde
 - Admin voi poistaa minkä tahansa aiheen, kysymyksen tai viestin.
-- Ohjaaja voi luoda uuden aiheen, kirjoittaa siitä lyhyen kuvauksen ja lisätä siihen kysymyksiä vastausvaihtoehtoineen.
+    + Tällä hetkellä Admin voi poista käyttäjän, aiheen, kysymyksen ja kommentin. Lisäksi Admin voi muokata kysymysten sisältöä.
+- Ohjaaja voi luoda uuden aiheen, kirjoittaa siitä lyhyen kuvauksen ja lisätä siihen kysymyksi vastausvaihtoehtoineen.
+    + Tämä toiminto on toteutettu. Ohjaaja voi luoda vain Tosi/Epätosi tyyppisiä kysymyksiä. Ohjaaja voi lisätä kysymyksiä ainoastaan itseluominsa aiheisiin.
+    + Monivalinta- sekä lukuarvovastaustyyppisiä kysymysten luominen on jatkokehityskohde.
 - Ohjaaja voi poistaa luomansa aiheen tai vain yksittäisen kysymyksen siitä aiheesta.
-- Ohjaaja voi katsoa kysymyskohtaiset tilastot, kuinka usein kukin kysymykseen on vastattu oikein.
-- Harjoittelija voi valita aiheen ja tutustua aiheen kuvauksen.
-- Harjoittelija voi valita kuinka monen kysymykseen hän halua vastata (esim. 10 tai 20 kpl). Harjoittelija vastaa kysymyksiin ja saa heti palautteen, menikö vastaus oikein. Lopuksi Harjoittelija näkee tilaston omista vastaauksista.
-- Harjoittelija voi lähettää Ohjaajalle viestin, jos havaitsee virheen kysymyksessä tai haluaa antaa palautetta sisällöstä. Ohjaaja voi vastata saamaansa palautteeseen.
+    + Tämä toiminto on siirretty Admin käyttäjälle. Ohjaajan mahdollisuus poistaa aiheita tai kysymyksiä on jatkokehityskohde.
+- Ohjaaja voi katsoa kysymyskohtaiset tilastot, kuinka usein mihinkin kysymykseen on vastattu oikein.
+    + Tämä toiminto on mahdollinen jatkokehityskohde
+- Harjoittelija voi valita aiheen ja tutustua aiheen kuvaukseen.
+    + Harjoittelija näkee aiheen kuvauksen kyselysivulla.
+- Harjoittelija voi valita kuinka moneen kysymykseen hän haluaa vastata (esim. 10 tai 20 kpl). Harjoittelija vastaa kysymyksiin ja saa heti palautteen siitä, kuinka moni vastaus meni oikein. Lopuksi Harjoittelija näkee tilaston omista vastauksista.
+    +  Siirtyessä kyselysivulle Harjoittelija näkee aiheen kuvauksen ja pyydetyn määrän kysymyksiä, jotka on arvottu aiheen kaikista kysymyksistä.
+    + Kyselyn suorittamisen jälkeen Harjoittelija näkee kuinka moneen kysymykseen hän on vastannut oikein ja mikä on oikeiden vastausten prosenttiosuus. Lisäksi kuinka monta kertaa Harjoittelija on vastannut tämän aiheen kysymyksiin, moneenko kysymykseen yhteensä sekä mikä on kaikkien vastausten oikeiden vastausten prosenttiosuus.
+- Harjoittelija voi lähettää Ohjaajalle viestin, jos havaitsee virheen kysymyksessä tai haluaa antaa palautetta sisällöstä.
+    + Harjoittelija pystyy lähettämään kommentin aiheesta/kysymyksestä. Ohjaaja näkee kaikki omien aiheiden kommentit ja voi kuitata ne luetuksi. Admin voi poista suljetut kysymykset. Ohjaajan mahdollisuus poistaa kommentti on jatkokehityskohde.
 
-Sovellus on testattavissa. Sovellus löytyy osoitteesta: https://tsoha2021-quizapp.herokuapp.com/
+Sovellus on testattavissa ja löytyy osoitteesta: https://tsoha2021-quizapp.herokuapp.com/
 
-Sovellukset testaaminen:
+Sovellukseen on luotu kolme testikäyttäjää:
 
-- Sovellukseen voi kirjautua, joko luomalla oman tunnuksen tai käyttämällä käyttäjätunnuksia:
-  Käyttäjä (salasana: testaus, rooli Ohjaaja), Testaaja (salasana: testaus2, rooli Harjoittelija) tai Admin (salasana: admin). Admin tunnuksen toimintoja ei ole vielä toteutettu, joten sitä ei kannata tässä vaiheessa käyttää.
-- Käyttäjä (rooli Ohjaaja) voi luoda aiheita ja lisätä aiheisiin kysymyksiä. Tällä hetkellä voidaan luoda ainoastaan Tosi/Epätosi tyyppisiä kysymyksiä.
-- Testaaja (rooli Harjoittelija) ja Käyttäjä (rooli Ohjaaja) voivat valita aiheen ja kysymysten määrän sekä suorittaa kyselyn. Tämä toiminto on toteutettu vasta osittain. Tällä hetkellä kysymysten arvonta ei toimi.
-- Käyttäjä näkee aiheen kuvauksen Quiz sivulla.
-- Kyselyn perusteella käyttäjä näkee kuinka moneen kysymykseen on vastattu oikein. 
-- Käyttäjä voi tallentaa aiheeseen liittyvät kommentit tai kysymykset tietokantaan, mutta ne ei vielä pysty sieltä tarkastelemaan.
+- Käyttäjä - salasana: testaus (rooli Ohjaaja)
+- Testaaja - salasana: testaus2 (rooli Harjoittelija)
+- Admin - salasana: admin (rooli Admin)
 
-Puutteet:
+#### Tietokannan rakenne:
 
-- Sovelluksen ulkoasu on puutteellinen
-- Sovelluksen toiminnoista puuttuu vastausten tilastot sekä kommenttien hakeminen. 
-- Tietoturva vaatimuksia on toteutettu vain osittain
-- Admin toiminnot kuten aiheiden, kysymysten ja kommenttien poistot puuttuu.
+Tietokantakaavio kuvattu schema.sql tiedostossa. Tietokannassa on 5 aktiivista taulua. Taulu Answer on luotu monivalinta- ja lukuarvo- kysymyksiä varten ja tässä vaiheessa ei ole käytössä.
+
+#### Sovelluksen jatkokehityskohteet:
+
+- Sovelluksen ulkoasu
+- Kommentteihin vastaaminen
+- Ohjaajan oikeuksien kehittäminen
